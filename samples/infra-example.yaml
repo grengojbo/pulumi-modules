@@ -1,0 +1,45 @@
+apiVersion: infra.devops/v1
+kind: Infrastructure
+metadata:
+  name: cluster-sample
+spec:
+  projectName: "myops"
+  # stackName: "infra-my-dev"
+  providers:
+    aws: 
+      # vpcId: sdf-tytr-324nm-32423
+      cidr: 172.30.0.0/22
+    azure:
+      cidr: 172.30.0.0/22
+    # hetzner:
+    #   cidr: 172.30.0.0/22
+  sg:
+    http: true
+    https: true
+    ssh:
+      - 0.0.0.0/0
+    kubeapi:
+      - 0.0.0.0/0
+      # - 1.1.1.2/32
+    # vault:
+    #   - 0.0.0.0/0
+    #   # - 1.1.1.2/32
+    # postgresql:
+    #   - 1.1.1.3/32
+    # mysql:
+    #   - 1.1.1.4/32
+    # mongo:
+    #   - 1.1.1.5/32
+    # mssql:
+    #   - 1.1.1.6/32
+    #   - 0.0.0.0/0
+    # custom:
+    #   - name: php-fpm
+    #     port: 9000
+    #     allows:
+    #       - 1.1.1.1/32
+    #       - 10.10.10.0/24
+    #   - name: nodejs
+    #     port: 3000
+    #     allows:
+    #       - 10.20.30.0/24
