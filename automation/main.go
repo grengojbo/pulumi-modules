@@ -26,9 +26,15 @@ import (
 // https://github.com/pulumi/pulumi-random/releases
 var pluginVersionRandom = "v4.2.0"
 // https://github.com/pulumi/pulumi-aws/releases
-var pluginVersionAws = "v4.15.0"
+var pluginVersionAws = "v4.17.0"
 // https://github.com/pulumi/pulumi-azure/releases
-var pluginVersionAzure = "v4.13.0"
+var pluginVersionAzure = "v4.15.0"
+// https://github.com/pulumi/pulumi-hcloud/releases
+var pluginVersionHetzner = "v1.3.0"
+// https://github.com/pulumi/pulumi-kubernetes/releases
+var pluginVersionKubernetes = "v3.6.3"
+// https://github.com/pulumi/pulumi-docker/releases
+var pluginVersionDocker = "v3.0.0"
 
 // убедитесь, что плагины запускаются один раз перед загрузкой сервера
 // убеждаемся, что установлены правильные плагины Pulumi
@@ -44,14 +50,38 @@ func EnsurePlugins(plugins *interfaces.EnabledPlugins) {
 	if err != nil {
 		log.Fatalf("Failed to install program plugins: %v\n", err)
 	}
-		log.Infof("Successfully installed random plugin")
+	log.Infof("Successfully installed random plugin")
 	
+	if plugins.Kubernetes {
+		err = w.InstallPlugin(ctx, "kubernetes", pluginVersionKubernetes)
+		if err != nil {
+			log.Fatalf("error installing kubernetes plugin: %v", err)
+		}
+		log.Infof("Successfully installed kubernetes plugin")
+	}
+	
+	if plugins.Docker {
+		err = w.InstallPlugin(ctx, "docker", pluginVersionDocker)
+		if err != nil {
+			log.Fatalf("error installing docker plugin: %v", err)
+		}
+		log.Infof("Successfully installed docker plugin")
+	}
+
 	if plugins.Azure {		
 		err = w.InstallPlugin(ctx, "azure", pluginVersionAzure)
 		if err != nil {
 			log.Fatalf("Failed to install program plugins: %v\n", err)
 		}
 		log.Infof("Successfully installed Azure plugin")
+	}
+	
+	if plugins.Hetzner {		
+		err = w.InstallPlugin(ctx, "hcloud", pluginVersionHetzner)
+		if err != nil {
+			log.Fatalf("Failed to install program plugins: %v\n", err)
+		}
+		log.Infof("Successfully installed Hetzner plugin")
 	}
 	
 	if plugins.Aws {		

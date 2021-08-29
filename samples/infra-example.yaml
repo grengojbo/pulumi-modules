@@ -5,14 +5,19 @@ metadata:
 spec:
   projectName: "myops"
   # stackName: "infra-my-dev"
+  tags:
+    version: "0.1.0"
+    author: <your name>
+    team: <your team>
+    feature: myFirstVPCWithPulumi
   providers:
     aws: 
       # vpcId: sdf-tytr-324nm-32423
       cidr: 172.30.0.0/22
     azure:
       cidr: 172.30.0.0/22
-    # hetzner:
-    #   cidr: 172.30.0.0/22
+    hetzner:
+      cidr: 172.30.0.0/22
   sg:
     http: true
     https: true

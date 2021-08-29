@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/pulumi/pulumi-aws/sdk/v4 v4.15.0
 	github.com/pulumi/pulumi-azure/sdk/v4 v4.13.0
+	github.com/pulumi/pulumi-docker/sdk/v3 v3.0.0 // indirect
 	github.com/pulumi/pulumi-random/sdk/v4 v4.2.0
 	github.com/pulumi/pulumi/sdk/v3 v3.10.0
 	github.com/sirupsen/logrus v1.8.1

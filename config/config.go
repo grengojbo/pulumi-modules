@@ -82,6 +82,10 @@ func FromViperConfig(stack string, config *viper.Viper) (interfaces.App, error) 
 
 	cfg.Spec.StackName = stack
 	
+	// TODO: реализовать загрузку плагина если он использунтся
+	cfg.Spec.Plugins.Kubernetes = true
+	cfg.Spec.Plugins.Docker = true
+
 	if len(cfg.Spec.Providers.Aws.Cidr) > 0 || len(cfg.Spec.Providers.Aws.VpcId) > 0 {
 		cfg.Spec.Plugins.Aws = true
 		if len(cfg.Spec.Providers.Aws.Region) == 0 {
