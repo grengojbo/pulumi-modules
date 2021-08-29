@@ -20,11 +20,21 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+	builtBy = "unknown"
+)
+
 // Version is the string that contains version
-var Version string
+// var Version string
 var stack string
 var configFile string
 var Flags = interfaces.RootFlags{}
+var org    string
+// var 	debug  bool
+// var region string
 
 var rootCmd = &cobra.Command{
 	Use:   "mgr",
@@ -90,9 +100,14 @@ func init() {
 
 	// add local flags
 	rootCmd.Flags().BoolVar(&Flags.Version, "version", false, "Show mgr version")
-
 	rootCmd.PersistentFlags().StringVar(&stack, "stack", "dev", "Current Pulumi stack")
-	
+	rootCmd.PersistentFlags().StringVar(&org, "org", "", "Pulumi org to use for your stack")
+
+	// _ = viper.BindEnv("region", "AWS_REGION") // if the user has set the AWS_REGION env var, use it
+	// _ = viper.BindPFlag("region", rootCmd.PersistentFlags().Lookup("region"))
+
+	_ = viper.BindPFlag("org", rootCmd.PersistentFlags().Lookup("org"))
+
 	/***************
 	 * Config File *
 	 ***************/
@@ -177,14 +192,15 @@ func initLogging() {
 
 // GetVersion returns the version for cli, it gets it from "git describe --tags" or returns "dev" when doing simple go build
 func GetVersion() string {
-	if len(Version) == 0 {
+	if len(version) == 0 {
 		return "v1-dev"
 	}
-	return Version
+	return version
 }
 
 func printVersion() {
 	fmt.Printf("mgr version %s\n", GetVersion())
+	fmt.Printf("Commit %s, built at %s by %s", commit, date, builtBy)
 }
 
 func generateFishCompletion(writer io.Writer) error {

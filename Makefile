@@ -13,10 +13,10 @@ BUILD_DATE := $(shell date +%Y%m%d-%H%M)
 
 # envrioments from .env file
 ifeq (,$(wildcard .env))
-  $(shell test ! -f example.env || cp example.env .env)
+  $(shell test ! -f example.env || cp example.env .env || sleep 5; echo "create .env")
 endif
 ifeq (,$(wildcard .env))
-	exit 1;
+	$(shell exit 1;)
 else
 	include .env
 	export $(shell sed 's/=.*//' .env)
@@ -155,8 +155,8 @@ info:   ## for developer information
 	@test -z "${ADMIN_USERNAME}" || echo "$(GREEN)Admin Username:$(RESET) ${ADMIN_USERNAME}"
 	@test -z "${ADMIN_PASSWORD}" || echo "$(GREEN)Admin Password:$(RESET) ${ADMIN_PASSWORD}"
 	@#echo "$(GREEN)Run command open in browser:$(RESET) open https://${NGINX_HOST}/admin/"
-	# @echo "$(GREEN)$(RESET)"
-	@test -z "${AWS_ACCESS_KEY}" || echo "AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}"
+	@#echo "$(GREEN)$(RESET)"
+	@test -z "${AWS_ACCESS_KEY_ID}" || echo "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
 	@test -z "${AWS_PROFILE}" || echo "AWS CLI profile: ${AWS_PROFILE}"
 	@test -z "${REGION}" || test -z "${AWS_ACCESS_KEY}" || echo "AWS region: ${REGION}"
 	@echo "---------------------------------------------------------------------"
@@ -196,8 +196,13 @@ patch:  ##  Set patch version
 # 	@sudo ./pre.sh
 # 	@sudo systemctl start docker-compose@elasticsearch.service
 
-# build:  ## Build Werf
-# 	@echo "Start Build project..."
+build:  ## Build Werf
+	@echo "Start Build project..."
+	@goreleaser build --rm-dist -p 1 --single-target --snapshot
+	@cp $(CURRENT_DIR)/dist/${PROJECT_NAME}_${os}_${arch}/${APP_NAME} $(CURRENT_DIR)/${APP_NAME}
+	@rm -Rf $(CURRENT_DIR)/dist
+	@echo "$(GREEN)Example RUN:$(RESET)"
+	@echo "./${APP_NAME} infra -c sample --stack my-dev --verbose"
 # 	@werf build --stages-storage :local --introspect-before-error
 
 # release:  ## Build and publish Release

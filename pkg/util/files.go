@@ -14,7 +14,7 @@ import (
 func GerConfigFileName(configFile string) (configFilePath string) {
 	messageError := "Is NOT cluster config file:"
 	if configFile == "sample" {
-		return "../samples/infra-example.yaml"
+		return "./samples/infra-example.yaml"
 	}
 	// file, err := afero.ReadFile(v.fs, filename)
 	// if err != nil {
