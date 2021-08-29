@@ -20,11 +20,19 @@ import (
 	"github.com/grengojbo/pulumi-modules/config"
 )
 
+// Using the main.version ldflag https://goreleaser.com/cookbooks/using-main.version/
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+	builtBy = "unknown"
+)
+
 func main() {
 	log.SetLevel(log.DebugLevel)
 
 	log.Infoln("Start main...")
-	
+
 	// app := interfaces.AppArgs{
 	// 	ProjectName: "myops",
 	// 	StackName: "dev",
@@ -33,12 +41,11 @@ func main() {
 	// app.Plugins.Aws = true
 	// app.Plugins.Azure = true
 
-
-	stackName :="dev"
+	stackName := "dev"
 	cnfFile := "sample"
-  config.InitConfig(cnfFile)
-	
-	cfg, err := config.FromViperConfig(stackName,	config.CfgViper)
+	config.InitConfig(cnfFile)
+
+	cfg, err := config.FromViperConfig(stackName, config.CfgViper)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -46,6 +53,6 @@ func main() {
 	log.Debugf("kind: %s", cfg.Kind)
 
 	automation.EnsurePlugins(&cfg.Spec.Plugins)
-	
+
 	log.Infoln("Finish :)")
 }
