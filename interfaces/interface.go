@@ -18,6 +18,8 @@ type RootFlags struct {
 }
 
 type EnabledPlugins struct {
+  Kubernetes bool
+  Docker bool
 	Aws bool
 	Azure bool
 	Hetzner bool
