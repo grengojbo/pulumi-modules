@@ -1,6 +1,8 @@
 package infra
 
 import (
+	"os"
+
 	"github.com/grengojbo/pulumi-modules/interfaces"
 	pkgAws "github.com/grengojbo/pulumi-modules/pkg/aws"
 	"github.com/grengojbo/pulumi-modules/pkg/util"
@@ -10,6 +12,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+var destroy string
 
 func NewCmdInfra(rootFlags *interfaces.RootFlags) *cobra.Command {
 
@@ -32,10 +36,31 @@ func NewCmdInfra(rootFlags *interfaces.RootFlags) *cobra.Command {
 			
 			sgList := util.ListSecurityGroup(rootFlags.Config.Spec.SecurityGroup)
 
+			if len(destroy) > 0 {
+				// https://github.com/pulumi/automation-api-examples/blob/fb4ffddd8dd5eade5a7d1454e23123ae432fa3ac/go/multi_stack_orchestration/main.go#L119
+				log.Warningln("TODO: add destroy")
+				// // for destroying, we must remove stack in reverse order
+				// // this means retrieving any dependend outputs first
+				// fmt.Println("getting bucketID for object stack")
+
+				// // wire up our destroy to stream progress to stdout
+				// stdoutStreamer := optdestroy.ProgressStreams(os.Stdout)
+
+				// outs, err := websiteStack.Outputs(ctx)
+				// if err != nil {
+				// 	fmt.Printf("failed to get website outputs: %v\n", err)
+				// 	os.Exit(1)
+				// }
+					os.Exit(0)
+			
+			}
+
+
 			if len(rootFlags.Config.Spec.Providers.Aws.Cidr) > 0 {
 				// aws, err := pkgAws.CreateVPC(rootFlags.Config.Spec.ProjectName, rootFlags.Config.Spec.StackName, rootFlags.Config.Spec.Providers.Aws, &sgList)
 				// aws, err := pkgAws.CreateVPC(rootFlags.Config.Spec.ProjectName, rootFlags.Config.Spec.StackName, &sgList)
-				err := pkgAws.CreateVPC(rootFlags.Config.Spec.ProjectName, rootFlags.Config.Spec.StackName, &rootFlags.Config.Spec.Providers.Aws, &sgList)
+				// err := pkgAws.CreateVPC(rootFlags.Config.Spec.ProjectName, rootFlags.Config.Spec.StackName, &rootFlags.Config.Spec.Providers.Aws, &sgList)
+				err := pkgAws.CreateVPC(&rootFlags.Config.Spec, &sgList)
 				if err != nil {
 					log.Errorln(err)
 				}
@@ -72,6 +97,7 @@ func NewCmdInfra(rootFlags *interfaces.RootFlags) *cobra.Command {
 	// cmd.AddCommand(NewCmdClusterList())
 
 	// add flags
+	cmd.Flags().StringVarP(&destroy, "destroy", "d", "", "Destroy stack")
 
 	// done
 	return cmd

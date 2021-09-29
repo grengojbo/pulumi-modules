@@ -8,7 +8,7 @@ import (
 	// "github.com/spf13/cobra"
 )
 
-// ListSecurityGroup подготовка мписка групп безопасности
+// ListSecurityGroup подготовка cписка групп безопасности
 func ListSecurityGroup(sg interfaces.SecurityGroupArgs) (sgList []interfaces.PortSecurityGroupArgs) {
 	// sgList := []interfaces.PortSecurityGroupArgs{}
 	if sg.Http {
