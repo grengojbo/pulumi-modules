@@ -175,7 +175,7 @@ init: ## File initialization and structure
 	@#./scripts/init-mysql.sh
 
 major:  ## Set major version
-	@#git tag -a v1.0.1 -m 'version v1.0.10' && git push --tags
+	@#git tag -a v0.0.1 -m 'version v0.0.1' && git push --tags
 	@git tag $$(svu major)
 	@git push --tags
 	@#goreleaser --rm-dist
