@@ -13,7 +13,7 @@ func ToPulumiStringArray(a []string) pulumi.StringArrayInput {
 	return pulumi.StringArray(res)
 }
 
-// GetEnv searches for the requested key in the pulumi context and provides 
+// GetEnv searches for the requested key in the pulumi context and provides
 // either the value of the key or the fallback.
 // https://www.retgits.com/2020/01/how-to-create-a-vpc-in-aws-using-pulumi-and-golang/
 func GetEnv(ctx *pulumi.Context, key string, fallback string) string {
@@ -21,6 +21,13 @@ func GetEnv(ctx *pulumi.Context, key string, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+// DefaultTags
+func DefaultTags(name string) pulumi.StringMap {
+	tags := make(pulumi.StringMap)
+	tags["Name"] = pulumi.String(name)
+	return tags
 }
 
 // // Prepare the tags that are used for each individual resource so they can be found

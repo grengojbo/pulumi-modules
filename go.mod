@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/aws/aws-sdk-go v1.40.32
+	github.com/manifoldco/promptui v0.8.0
 	github.com/pulumi/pulumi-aws/sdk/v4 v4.15.0
 	github.com/pulumi/pulumi-azure/sdk/v4 v4.13.0
 	github.com/pulumi/pulumi-docker/sdk/v3 v3.0.0

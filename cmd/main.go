@@ -32,7 +32,8 @@ var (
 var stack string
 var configFile string
 var Flags = interfaces.RootFlags{}
-var org    string
+var org string
+
 // var 	debug  bool
 // var region string
 
@@ -45,7 +46,7 @@ var rootCmd = &cobra.Command{
 		log.Infof("Inside rootCmd PersistentPreRun with args: %v\n", args)
 		log.Infof("stack: %s", stack)
 
-  	config.InitConfig(configFile)
+		config.InitConfig(configFile)
 		cfg, err := config.FromViperConfig(stack, config.CfgViper)
 		if err != nil {
 			log.Fatalln(err)
@@ -112,10 +113,10 @@ func init() {
 	 * Config File *
 	 ***************/
 
-	 rootCmd.PersistentFlags().StringVarP(&configFile, "config", "c", "", "Path of a config file to use")
-	 if err := cobra.MarkFlagFilename(rootCmd.PersistentFlags(), "config", "yaml", "yml"); err != nil {
-		 log.Fatalln("Failed to mark flag 'config' as filename flag")
-	 }
+	rootCmd.PersistentFlags().StringVarP(&configFile, "config", "c", "", "Path of a config file to use")
+	if err := cobra.MarkFlagFilename(rootCmd.PersistentFlags(), "config", "yaml", "yml"); err != nil {
+		log.Fatalln("Failed to mark flag 'config' as filename flag")
+	}
 	// // add subcommands
 	rootCmd.AddCommand(NewCmdCompletion())
 	rootCmd.AddCommand(infra.NewCmdInfra(&Flags))
