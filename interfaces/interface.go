@@ -1,6 +1,9 @@
 package interfaces
 
 import (
+	"context"
+
+	"github.com/pulumi/pulumi/sdk/v3/go/auto"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -46,6 +49,12 @@ type AppStatus struct {
 
 // type Networking struct {
 // }
+
+type Module struct {
+  Context context.Context
+  Workspace auto.Workspace
+  Args AppArgs
+}
 
 type AppArgs struct {
 	ProjectName string `mapstructure:"projectName" yaml:"projectName" json:"projectName,omitempty"`

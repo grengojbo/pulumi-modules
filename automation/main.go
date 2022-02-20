@@ -21,15 +21,19 @@ import (
 )
 
 // https://github.com/pulumi/pulumi-random/releases
-var pluginVersionRandom = "v4.2.0"
+var pluginVersionRandom = "v4.3.1"
 // https://github.com/pulumi/pulumi-aws/releases
-var pluginVersionAws = "v4.22.0"
+var pluginVersionAws = "v4.37.5"
+// https://github.com/pulumi/pulumi-aws-native
+var pluginVersionAwsNtive = "v0.12.0"
 // https://github.com/pulumi/pulumi-azure/releases
-var pluginVersionAzure = "v4.20.1"
+var pluginVersionAzure = "v4.39.0"
+// https://github.com/pulumi/pulumi-azure-native/releases
+var pluginVersionAzureNetive = "v1.58.0"
 // https://github.com/pulumi/pulumi-hcloud/releases
-var pluginVersionHetzner = "v1.5.0"
+var pluginVersionHetzner = "v1.7.1"
 // https://github.com/pulumi/pulumi-kubernetes/releases
-var pluginVersionKubernetes = "v3.7.2"
+var pluginVersionKubernetes = "v3.16.0"
 // https://github.com/pulumi/pulumi-docker/releases
 var pluginVersionDocker = "v3.1.0"
 
@@ -145,4 +149,66 @@ func CreateOrSelectStack(ctx context.Context, appSetting *interfaces.AppArgs, de
 	log.Infoln("Refresh succeeded!")
 
 	return s
+}
+
+// NewModule create new module
+func NewModule(appSetting *interfaces.AppArgs) (m *interfaces.Module) {
+	ctx := context.Background()
+	w, err := auto.NewLocalWorkspace(ctx)
+	if err != nil {
+		log.Fatalf("Failed to setup and run http server: %v\n", err)
+		// os.Exit(1)
+	}
+	
+	err = w.InstallPlugin(ctx, "random", pluginVersionRandom)
+	if err != nil {
+		log.Fatalf("Failed to install program plugins: %v\n", err)
+	}
+	log.Infof("Successfully installed random plugin")
+	
+	if appSetting.Plugins.Kubernetes {
+		err = w.InstallPlugin(ctx, "kubernetes", pluginVersionKubernetes)
+		if err != nil {
+			log.Fatalf("error installing kubernetes plugin: %v", err)
+		}
+		log.Infof("Successfully installed kubernetes plugin")
+	}
+	
+	if appSetting.Plugins.Docker {
+		err = w.InstallPlugin(ctx, "docker", pluginVersionDocker)
+		if err != nil {
+			log.Fatalf("error installing docker plugin: %v", err)
+		}
+		log.Infof("Successfully installed docker plugin")
+	}
+
+	if appSetting.Plugins.Azure {		
+		err = w.InstallPlugin(ctx, "azure", pluginVersionAzure)
+		if err != nil {
+			log.Fatalf("Failed to install program plugins: %v\n", err)
+		}
+		log.Infof("Successfully installed Azure plugin")
+	}
+	
+	if appSetting.Plugins.Hetzner {		
+		err = w.InstallPlugin(ctx, "hcloud", pluginVersionHetzner)
+		if err != nil {
+			log.Fatalf("Failed to install program plugins: %v\n", err)
+		}
+		log.Infof("Successfully installed Hetzner plugin")
+	}
+	
+	if appSetting.Plugins.Aws {		
+		err = w.InstallPlugin(ctx, "aws", pluginVersionAws)
+		if err != nil {
+			log.Fatalf("Failed to install program plugins: %v\n", err)
+			// log.Fatalln(err)
+			// fmt.Printf("Failed to install program plugins: %v\n", err)
+			// os.Exit(1)
+		}
+		log.Infof("Successfully installed AWS plugin")
+	}
+	m.Workspace = w
+	m.Context = ctx
+	return m
 }
